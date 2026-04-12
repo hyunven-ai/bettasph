@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-brand-blue: #0A2540;
+  --color-brand-aqua: #20C997;
+  --color-brand-gold: #FFC107;
+  --color-brand-dark: #0B1120;
+  --color-brand-darker: #050810;
+  --color-brand-navy: #0f172a;
+  
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-outfit: var(--font-outfit), var(--font-sans);
+
+  --shadow-glow: 0 0 20px rgba(32, 201, 151, 0.25);
+  --shadow-glow-strong: 0 0 30px rgba(32, 201, 151, 0.5);
+  --shadow-bento: 0 4px 24px -4px rgba(0, 0, 0, 0.05);
+  --shadow-bento-hover: 0 12px 32px -4px rgba(32, 201, 151, 0.15);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom Scrollbar for better UI */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Utility classes for glassmorphism */
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-bento;
+  }
+  .glass-panel-dark {
+    @apply bg-[var(--color-brand-dark)]/70 backdrop-blur-md border border-white/10 shadow-bento;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-brand-aqua)] to-blue-500;
+  }
 }
