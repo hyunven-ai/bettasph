@@ -5,6 +5,8 @@ import ProductCard from "@/components/ProductCard";
 import { supabase } from "@/lib/supabase";
 import { FishProduct } from "@/components/ProductCard";
 import { Sparkles, Filter } from "lucide-react";
+import { FadeIn } from "@/components/FadeIn";
+import { ProductSkeleton } from "@/components/Skeleton";
 
 type Category = { id: string; name: string; slug: string; color: string };
 
@@ -63,14 +65,22 @@ export default function CatalogPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6">
-            <Sparkles className="w-4 h-4 text-[var(--color-brand-aqua)]" />
-            <span className="text-slate-300 text-sm font-medium">Bettasph Exclusive Gallery</span>
-          </div>
-          <h1 className="font-outfit text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">Eksplorasi Mahakarya</h1>
-          <p className="text-xl text-slate-400 font-light">
-            Setiap ikan di bawah ini memiliki sertifikasi genetik dan lolos uji kesehatan ketat. Pilih mahakarya air tawar Anda sekarang.
-          </p>
+          <FadeIn delay={0.1}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6">
+              <Sparkles className="w-4 h-4 text-[var(--color-brand-aqua)]" />
+              <span className="text-slate-300 text-sm font-medium">Bettasph Exclusive Gallery</span>
+            </div>
+          </FadeIn>
+          
+          <FadeIn delay={0.2}>
+            <h1 className="font-outfit text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-[1.1]">Eksplorasi Mahakarya</h1>
+          </FadeIn>
+
+          <FadeIn delay={0.3}>
+            <p className="text-xl text-slate-400 font-light max-w-2xl mx-auto">
+              Setiap ikan di bawah ini memiliki sertifikasi genetik dan lolos uji kesehatan ketat. Pilih mahakarya air tawar Anda sekarang.
+            </p>
+          </FadeIn>
         </div>
 
         {/* Filter Categories — Dinamis dari DB */}
@@ -100,21 +110,25 @@ export default function CatalogPage() {
         </div>
 
         {/* Grid Catalog */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {loading ? (
-            <div className="col-span-full py-12 flex justify-center">
-              <div className="w-8 h-8 md:w-10 md:h-10 border-4 border-slate-700 border-t-[var(--color-brand-aqua)] rounded-full animate-spin"></div>
-            </div>
+             Array.from({ length: 8 }).map((_, i) => (
+                <ProductSkeleton key={i} />
+             ))
           ) : (
             <>
-              {filteredFish.map((fish) => (
-                <ProductCard key={fish.id} product={fish} />
+              {filteredFish.map((fish, index) => (
+                 <FadeIn key={fish.id} delay={index * 0.05} direction="up" fullWidth>
+                    <ProductCard product={fish} />
+                 </FadeIn>
               ))}
               {filteredFish.length === 0 && (
-                <div className="col-span-full text-center py-12 text-slate-400">
-                  {activeCategory === "Semua Koleksi"
-                    ? "Belum ada koleksi ikan di katalog."
-                    : `Belum ada ikan dalam kategori "${activeCategory}".`}
+                <div className="col-span-full text-center py-20 text-slate-500 border border-white/5 rounded-3xl bg-white/5">
+                  <p className="text-lg">
+                    {activeCategory === "Semua Koleksi"
+                      ? "Belum ada koleksi ikan di katalog."
+                      : `Belum ada ikan dalam kategori "${activeCategory}".`}
+                  </p>
                 </div>
               )}
             </>

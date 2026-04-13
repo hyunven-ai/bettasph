@@ -2,16 +2,15 @@
 @plugin "@tailwindcss/typography";
 
 /* Fallback Typography for Blog (works immediately without restarting server) */
-.prose h1 { @apply !text-3xl !font-bold !mt-8 !mb-4 !text-white; }
-.prose h2 { @apply !text-2xl !font-bold !mt-8 !mb-4 !text-white; }
-.prose h3 { @apply !text-xl !font-bold !mt-6 !mb-3 !text-white; }
-.prose p { @apply mb-4 leading-relaxed text-slate-300; }
-.prose ul { @apply list-disc pl-6 mb-4 text-slate-300; }
-.prose ol { @apply list-decimal pl-6 mb-4 text-slate-300; }
-.prose blockquote { @apply border-l-4 border-indigo-500 pl-4 italic text-slate-400 mb-4; }
-.prose a { @apply text-blue-400 hover:text-blue-300 underline; }
-.prose img { @apply rounded-xl my-6 border border-white/10; }
-
+.prose h1 { @apply !text-4xl !font-black !mt-12 !mb-6 !text-white !tracking-tighter !leading-tight; }
+.prose h2 { @apply !text-3xl !font-extrabold !mt-10 !mb-5 !text-white !tracking-tight; }
+.prose h3 { @apply !text-2xl !font-bold !mt-8 !mb-4 !text-slate-100 !tracking-tight; }
+.prose p { @apply mb-6 leading-[1.7] text-slate-300 text-lg; }
+.prose ul { @apply list-disc pl-6 mb-6 text-slate-300 space-y-2; }
+.prose ol { @apply list-decimal pl-6 mb-6 text-slate-300 space-y-2; }
+.prose blockquote { @apply border-l-4 border-[var(--color-brand-aqua)] pl-6 italic text-slate-400 my-8 py-2 bg-white/5 rounded-r-xl; }
+.prose a { @apply text-[var(--color-brand-aqua)] hover:text-white underline underline-offset-4 transition-colors; }
+.prose img { @apply rounded-[2rem] my-10 border border-white/10 shadow-2xl mx-auto; }
 
 @theme {
   --color-brand-blue: #0A2540;
@@ -27,39 +26,64 @@
   --shadow-glow: 0 0 20px rgba(32, 201, 151, 0.25);
   --shadow-glow-strong: 0 0 30px rgba(32, 201, 151, 0.5);
   --shadow-bento: 0 4px 24px -4px rgba(0, 0, 0, 0.05);
-  --shadow-bento-hover: 0 12px 32px -4px rgba(32, 201, 151, 0.15);
+  --shadow-bento-hover: 0 20px 40px -4px rgba(32, 201, 151, 0.15);
+
+  --animate-gradient-x: gradient-x 15s ease infinite;
+  --ease-senior: cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes gradient-x {
+    0%, 100% { background-size: 200% 200%; background-position: left center; }
+    50% { background-size: 200% 200%; background-position: right center; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
 }
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    @apply font-sans antialiased;
+    background-color: #0B1120;
+    color: #f1f5f9;
+  }
+  ::selection {
+    background-color: var(--color-brand-aqua);
+    color: white;
   }
 }
 
-/* Custom Scrollbar for better UI */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  @apply bg-[#050810];
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  @apply bg-slate-800 border-2 border-[#050810] rounded-full hover:bg-slate-700 transition-colors;
 }
 
-/* Utility classes for glassmorphism */
+/* Utility classes for glassmorphism & Senior UI */
 @layer utilities {
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-bento;
+    @apply bg-white/80 backdrop-blur-xl border border-white/40 shadow-bento;
   }
   .glass-panel-dark {
-    @apply bg-[var(--color-brand-dark)]/70 backdrop-blur-md border border-white/10 shadow-bento;
+    @apply bg-[var(--color-brand-dark)]/80 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-brand-aqua)] to-blue-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-brand-aqua)] via-blue-400 to-emerald-400 animate-gradient-x;
   }
+  
+  /* 8pt Spacing Helpers */
+  .section-padding { @apply py-16 md:py-24 lg:py-32; }
+  .item-spacing { @apply gap-8 md:gap-10 lg:gap-12; }
+  
+  /* Senior Animation Utility */
+  .smooth-transition { @apply transition-all duration-500 ease-senior; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }

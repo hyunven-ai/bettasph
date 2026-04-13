@@ -16,6 +16,7 @@ import {
   Package,
 } from "lucide-react";
 import Link from "next/link";
+import { FadeIn } from "@/components/FadeIn";
 
 // ------------------------------------------------------------------
 // Tiny donut chart drawn with SVG (no external charting library needed)
@@ -105,18 +106,18 @@ function StatCard({
   dotColor: string;
 }) {
   return (
-    <div className="relative bg-[#11121f] border border-white/[0.06] rounded-2xl p-5 overflow-hidden hover:border-indigo-500/20 transition-all duration-300 group">
+    <div className="relative bg-[#11121f] border border-white/[0.04] rounded-2xl p-6 overflow-hidden hover:border-[var(--color-brand-aqua)]/20 hover:scale-[1.02] transition-all duration-500 group">
       {/* top-left icon */}
-      <div className={`w-9 h-9 rounded-xl ${iconBg} flex items-center justify-center mb-6`}>
-        <Icon className={`w-4.5 h-4.5 ${iconColor}`} style={{ width: "18px", height: "18px" }} />
+      <div className={`w-11 h-11 rounded-xl ${iconBg} flex items-center justify-center mb-6 border border-white/5`}>
+        <Icon className={`w-5 h-5 ${iconColor}`} />
       </div>
       {/* top-right colored dot */}
       <div
-        className={`absolute top-4 right-4 w-8 h-8 rounded-full ${dotColor} opacity-30 blur-[2px] group-hover:opacity-50 transition-opacity`}
+        className={`absolute top-4 right-4 w-10 h-10 rounded-full ${dotColor} opacity-20 blur-[6px] group-hover:opacity-40 transition-opacity`}
       />
       {/* value */}
-      <p className="text-3xl font-bold text-zinc-100 tracking-tight mb-1">{value}</p>
-      <p className="text-[13px] text-zinc-500 font-medium">{label}</p>
+      <p className="text-3xl font-black text-white tracking-tighter mb-1 font-outfit">{value}</p>
+      <p className="text-[12px] text-zinc-500 font-bold uppercase tracking-wider">{label}</p>
     </div>
   );
 }
@@ -253,71 +254,81 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-end justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">Dashboard</h1>
-          <p className="text-sm text-zinc-500 mt-0.5">Selamat datang kembali! Ini ikhtisar inventaris Anda.</p>
+      <FadeIn delay={0.1} direction="none">
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-black text-white tracking-tighter font-outfit">Dashboard</h1>
+            <p className="text-sm text-zinc-500 mt-1 font-medium">Selamat datang kembali! Ini ikhtisar inventaris Anda.</p>
+          </div>
+          <Link
+            href="/admin/tambah"
+            className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl transition-all shadow-[0_4px_20px_rgba(79,70,229,0.3)] hover:scale-105 active:scale-95"
+          >
+            <Plus className="w-5 h-5" />
+            Tambah Ikan
+          </Link>
         </div>
-        <Link
-          href="/admin/tambah"
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.25)]"
-        >
-          <Plus className="w-4 h-4" />
-          Tambah Ikan
-        </Link>
-      </div>
+      </FadeIn>
 
       {/* Stats Grid */}
       {loading ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-[#11121f] border border-white/[0.06] rounded-2xl p-5 h-36 animate-pulse" />
+            <div key={i} className="bg-[#11121f] border border-white/[0.04] rounded-2xl p-6 h-40 animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {statCards.map((card) => (
-            <StatCard key={card.label} {...card} />
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+          {statCards.map((card, index) => (
+            <FadeIn key={card.label} delay={0.1 + (index * 0.05)} fullWidth>
+              <StatCard {...card} />
+            </FadeIn>
           ))}
         </div>
       )}
 
       {/* Bottom Section: Activity Chart + Donut Chart */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Activity — Last 7 Days */}
-        <div className="bg-[#11121f] border border-white/[0.06] rounded-2xl p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <RefreshCw className="w-4 h-4 text-zinc-500" />
-            <h2 className="text-sm font-semibold text-zinc-300">Aktivitas Inventaris</h2>
-            <span className="ml-auto text-[11px] text-zinc-600 bg-white/5 px-2 py-0.5 rounded-full">7 Hari Terakhir</span>
+        <FadeIn delay={0.4} direction="up" fullWidth>
+          <div className="bg-[#11121f] border border-white/[0.04] rounded-2xl p-8 h-full">
+            <div className="flex items-center gap-2 mb-8">
+              <RefreshCw className="w-4 h-4 text-zinc-500" />
+              <h2 className="text-sm font-bold text-zinc-300 uppercase tracking-widest">Aktivitas Inventaris</h2>
+              <span className="ml-auto text-[10px] font-bold text-zinc-400 bg-white/5 px-3 py-1 rounded-full uppercase">7 Hari Terakhir</span>
+            </div>
+            {loading ? (
+              <div className="h-[100px] flex items-center justify-center text-zinc-600 text-sm animate-pulse">
+                Memuat basis data...
+              </div>
+            ) : fishList.length === 0 ? (
+              <div className="h-[100px] flex items-center justify-center text-zinc-600 text-sm italic">
+                Belum ada data aktivitas tercatat.
+              </div>
+            ) : (
+              <div className="flex justify-center">
+                <ActivityBars data={activityData} />
+              </div>
+            )}
           </div>
-          {loading ? (
-            <div className="h-[100px] flex items-center justify-center text-zinc-600 text-sm">
-              Memuat data...
-            </div>
-          ) : fishList.length === 0 ? (
-            <div className="h-[100px] flex items-center justify-center text-zinc-600 text-sm">
-              Belum ada data aktivitas.
-            </div>
-          ) : (
-            <ActivityBars data={activityData} />
-          )}
-        </div>
+        </FadeIn>
 
         {/* Donut Chart — Fish by Status */}
-        <div className="bg-[#11121f] border border-white/[0.06] rounded-2xl p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <Fish className="w-4 h-4 text-zinc-500" />
-            <h2 className="text-sm font-semibold text-zinc-300">Koleksi berdasarkan Status</h2>
-          </div>
-          {loading ? (
-            <div className="h-[140px] flex items-center justify-center text-zinc-600 text-sm">
-              Memuat data...
+        <FadeIn delay={0.5} direction="up" fullWidth>
+          <div className="bg-[#11121f] border border-white/[0.04] rounded-2xl p-8 h-full">
+            <div className="flex items-center gap-2 mb-8">
+              <Fish className="w-4 h-4 text-zinc-500" />
+              <h2 className="text-sm font-bold text-zinc-300 uppercase tracking-widest">Alokasi Koleksi</h2>
             </div>
-          ) : (
-            <DonutChart available={tersedia} sold={terjual} total={totalIkan} />
-          )}
-        </div>
+            {loading ? (
+              <div className="h-[140px] flex items-center justify-center text-zinc-600 text-sm animate-pulse">
+                Menganalisis status...
+              </div>
+            ) : (
+              <DonutChart available={tersedia} sold={terjual} total={totalIkan} />
+            )}
+          </div>
+        </FadeIn>
       </div>
 
       {/* Recent Inventory Table */}

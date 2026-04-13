@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { SocialWidgets } from "@/components/SocialWidgets";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export default async function FrontendLayout({
@@ -21,12 +21,8 @@ export default async function FrontendLayout({
       <main className="flex-1">{children}</main>
       <Footer />
       
-      {/* Floating Action Buttons */}
-      <SocialWidgets 
-        whatsapp={settings?.whatsapp} 
-        telegram={settings?.telegram}
-        color={settings?.primarycolor}
-      />
+      {/* Floating Senior UI WhatsApp Button */}
+      <FloatingWhatsApp />
     </div>
   );
 }
