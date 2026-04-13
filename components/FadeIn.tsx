@@ -12,8 +12,8 @@ interface FadeInProps {
 }
 
 export function FadeIn({ children, delay = 0, direction = "up", fullWidth = false, className = "" }: FadeInProps) {
-  // Custom elegant easing curve [0.16, 1, 0.3, 1] for senior UI feel
-  const customEase = [0.16, 1, 0.3, 1];
+  // Custom elegant easing curve — cast as const so TS infers the tuple type
+  const customEase = [0.16, 1, 0.3, 1] as const;
 
   const variants = {
     hidden: {
