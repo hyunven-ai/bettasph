@@ -16,7 +16,21 @@ const mapDbToState = (dbRec: any) => ({
   emailDigest: dbRec.emaildigest ?? false,
   maintenanceMode: dbRec.maintenancemode ?? false,
   primaryColor: dbRec.primarycolor || '#6366f1',
-  darkMode: dbRec.darkmode ?? true
+  darkMode: dbRec.darkmode ?? true,
+  // SEO Fields
+  seoTitleTemplate: dbRec.seo_title_template || '%title% | %site_name%',
+  seoDescription: dbRec.seo_description || '',
+  seoSiteName: dbRec.seo_site_name || 'Ikanpedia.id',
+  seoOgImage: dbRec.seo_og_image || '',
+  seoTwitterHandle: dbRec.seo_twitter_handle || '',
+  seoRobotsTxt: dbRec.seo_robots_txt || 'User-agent: *\nAllow: /',
+  seoSitemapUrl: dbRec.seo_sitemap_url || '',
+  seoCanonicalBase: dbRec.seo_canonical_base || 'https://ikanpedia.id.com',
+  // Analytics Fields
+  analyticsGaId: dbRec.analytics_ga_id || '',
+  analyticsFbPixel: dbRec.analytics_fb_pixel || '',
+  analyticsTiktokPixel: dbRec.analytics_tiktok_pixel || '',
+  analyticsGtmId: dbRec.analytics_gtm_id || ''
 });
 
 // Helper to map JS state (camelCase) to DB columns (lowercase)
@@ -34,7 +48,21 @@ const mapStateToDb = (stateObj: any) => ({
   emaildigest: stateObj.emailDigest,
   maintenancemode: stateObj.maintenanceMode,
   primarycolor: stateObj.primaryColor,
-  darkmode: stateObj.darkMode
+  darkmode: stateObj.darkMode,
+  // SEO
+  seo_title_template: stateObj.seoTitleTemplate,
+  seo_description: stateObj.seoDescription,
+  seo_site_name: stateObj.seoSiteName,
+  seo_og_image: stateObj.seoOgImage,
+  seo_twitter_handle: stateObj.seoTwitterHandle,
+  seo_robots_txt: stateObj.seoRobotsTxt,
+  seo_sitemap_url: stateObj.seoSitemapUrl,
+  seo_canonical_base: stateObj.seoCanonicalBase,
+  // Analytics
+  analytics_ga_id: stateObj.analyticsGaId,
+  analytics_fb_pixel: stateObj.analyticsFbPixel,
+  analytics_tiktok_pixel: stateObj.analyticsTiktokPixel,
+  analytics_gtm_id: stateObj.analyticsGtmId
 });
 
 export async function GET() {
@@ -64,7 +92,21 @@ export async function GET() {
       emailDigest: false,
       maintenanceMode: false,
       primaryColor: '#8b5cf6',
-      darkMode: true
+      darkMode: true,
+      // Default SEO
+      seoTitleTemplate: '%title% | %site_name%',
+      seoDescription: 'Temukan panduan lengkap seputar ikan hias, tips perawatan, dan jual beli ikan hias terpercaya hanya di Ikanpedia.id. Cocok untuk pemula hingga kolektor.',
+      seoSiteName: 'Ikanpedia.id – Edukasi & Marketplace Ikan Hias Terlengkap di Indonesia',
+      seoOgImage: '',
+      seoTwitterHandle: '',
+      seoRobotsTxt: 'User-agent: *\nAllow: /',
+      seoSitemapUrl: '',
+      seoCanonicalBase: 'https://ikanpedia.id.com',
+      // Default Analytics
+      analyticsGaId: '',
+      analyticsFbPixel: '',
+      analyticsTiktokPixel: '',
+      analyticsGtmId: ''
     });
   }
 

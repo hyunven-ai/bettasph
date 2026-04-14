@@ -87,6 +87,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       label: "ANALITIK & SEO",
       items: [
         { name: "SEO Pages", icon: Search, href: "/admin/seo" },
+        { name: "SEO Setting", icon: Settings, href: "/admin/seo-settings" },
         { name: "Analitik Koleksi", icon: PieChart, href: "/admin/analitik" },
       ],
     },
