@@ -51,14 +51,14 @@ export async function GET() {
   // Jika belum ada, kembalikan default
   if (!data) {
     return NextResponse.json({
-      storeName: 'Bettasph',
+      storeName: 'Ikanpedia.id',
       storeTagline: 'Kurator Ikan Hias Premium Indonesia',
-      storeUrl: 'https://bettasph.com',
+      storeUrl: 'https://ikanpedia.id.com',
       whatsapp: '+6281234567890',
-      telegram: 'BettasphOfficial',
-      email: 'info@bettasph.com',
+      telegram: 'Ikanpedia.idOfficial',
+      email: 'info@ikanpedia.id.com',
       address: 'Jakarta Barat, Indonesia',
-      instagram: '@bettasph_official',
+      instagram: '@ikanpedia.id_official',
       orderNotif: true,
       lowStockNotif: true,
       emailDigest: false,

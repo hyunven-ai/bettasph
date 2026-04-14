@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 
 export const metadata = {
-  title: 'Kebijakan Garansi (D.O.A) | Bettasph',
-  description: 'Prosedur dan syarat klaim garansi ikan hias Death on Arrival (DOA) di Bettasph.',
+  title: 'Kebijakan Garansi (D.O.A) | Ikanpedia.id',
+  description: 'Prosedur dan syarat klaim garansi ikan hias Death on Arrival (DOA) di Ikanpedia.id.',
 };
 
 export default function KebijakanGaransiPage() {
@@ -29,7 +29,7 @@ export default function KebijakanGaransiPage() {
 
           <div className="prose prose-slate prose-invert lg:prose-lg max-w-none text-slate-300 space-y-6">
             <p className="lead text-xl text-slate-400">
-              Kepuasan dan kenyamanan Anda adalah prioritas kami. Kami memberikan jaminan <strong>Death On Arrival (D.O.A)</strong> untuk setiap pembelian ikan hias di Bettasph.
+              Kepuasan dan kenyamanan Anda adalah prioritas kami. Kami memberikan jaminan <strong>Death On Arrival (D.O.A)</strong> untuk setiap pembelian ikan hias di Ikanpedia.id.
             </p>
 
             <h2 className="text-2xl font-bold text-white mt-10">Syarat Klaim Garansi 100%</h2>

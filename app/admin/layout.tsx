@@ -63,7 +63,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return null;
   }
 
-  const userEmail = session?.user?.email ?? "admin@bettasph.com";
+  const userEmail = session?.user?.email ?? "admin@ikanpedia.id.com";
   const userInitial = userEmail[0].toUpperCase();
 
   const menuSections = [
@@ -108,7 +108,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-[0_0_12px_rgba(99,102,241,0.4)]">
               <Fish className="h-4 w-4 text-white" />
             </div>
-            <span className="font-bold text-base text-white tracking-tight">Bettasph</span>
+            <span className="font-bold text-base text-white tracking-tight">Ikanpedia.id</span>
           </Link>
         </div>
 

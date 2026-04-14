@@ -68,7 +68,7 @@ export default function CatalogPage() {
           <FadeIn delay={0.1}>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-6">
               <Sparkles className="w-4 h-4 text-[var(--color-brand-aqua)]" />
-              <span className="text-slate-300 text-sm font-medium">Bettasph Exclusive Gallery</span>
+              <span className="text-slate-300 text-sm font-medium">Ikanpedia.id Exclusive Gallery</span>
             </div>
           </FadeIn>
           

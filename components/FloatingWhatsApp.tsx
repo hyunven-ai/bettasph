@@ -38,7 +38,7 @@ export function FloatingWhatsApp() {
       </div>
       
       <Link 
-        href="https://wa.me/628999435054?text=Halo%20Bettasph,%20saya%20tertarik%20dengan%20koleksi%20ikan%20hias%20Anda."
+        href="https://wa.me/628999435054?text=Halo%20Ikanpedia.id,%20saya%20tertarik%20dengan%20koleksi%20ikan%20hias%20Anda."
         target="_blank"
         rel="noopener noreferrer"
         className="relative flex items-center justify-center w-14 h-14 bg-gradient-to-tr from-[#25D366] to-[#128C7E] rounded-full shadow-[0_4px_30px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_40px_rgba(37,211,102,0.6)] hover:-translate-y-1 transition-all duration-300 group"

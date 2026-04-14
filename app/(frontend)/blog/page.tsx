@@ -3,7 +3,7 @@ import { Calendar, User, ArrowRight } from "lucide-react";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const metadata = {
-  title: 'Blog & Edukasi | Bettasph',
+  title: 'Blog & Edukasi | Ikanpedia.id',
   description: 'Artikel, tips perawatan, dan edukasi seputar ikan hias cupang, koi, dan arwana.',
 };
 

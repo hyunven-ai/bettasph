@@ -39,7 +39,7 @@ export default function AdminLogin() {
           </div>
         </div>
         
-        <h1 className="text-2xl font-bold text-center text-zinc-100 tracking-tight mb-2">Akses Sistem Bettasph</h1>
+        <h1 className="text-2xl font-bold text-center text-zinc-100 tracking-tight mb-2">Akses Sistem Ikanpedia.id</h1>
         <p className="text-zinc-400 text-center text-sm mb-8">Otorisasi Khusus Kurator & Admin</p>
 
         {error && (
@@ -62,7 +62,7 @@ export default function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-zinc-100 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
-                placeholder="admin@bettasph.com"
+                placeholder="admin@ikanpedia.id.com"
               />
             </div>
           </div>

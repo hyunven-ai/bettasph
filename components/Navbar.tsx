@@ -13,18 +13,18 @@ export default function Navbar() {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [whatsapp, setWhatsapp] = useState("628999435054");
   const pathname = usePathname();
-  
+
   const cartItems = useCartStore((state) => state.items);
   const totalCart = useCartStore((state) => state.getTotal());
   const removeFromCart = useCartStore((state) => state.removeItem);
-  
+
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => {
       setHasScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
-    
+
     // Ambil nomor WA dari setting (Supabase)
     fetch("/api/settings")
       .then(res => res.json())
@@ -33,8 +33,8 @@ export default function Navbar() {
           setWhatsapp(data.whatsapp.replace(/\D/g, ''));
         }
       })
-      .catch(() => {});
-      
+      .catch(() => { });
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -45,7 +45,7 @@ export default function Navbar() {
   };
 
   const handleCheckoutWA = () => {
-    let message = "Halo Bettasph! Saya ingin memesan produk premium berikut:%0A%0A";
+    let message = "Halo Ikanpedia.id! Saya ingin memesan produk premium berikut:%0A%0A";
     cartItems.forEach((item, index) => {
       message += `${index + 1}. ${item.name} (${item.quantity}x) - ${formatPrice(item.price * item.quantity)}%0A`;
     });
@@ -61,12 +61,11 @@ export default function Navbar() {
 
   return (
     <>
-      <nav 
-        className={`fixed w-full z-40 transition-all duration-300 ${
-          hasScrolled 
-            ? "bg-[#050810]/80 backdrop-blur-lg border-b border-white/10 py-3 shadow-lg" 
+      <nav
+        className={`fixed w-full z-40 transition-all duration-300 ${hasScrolled
+            ? "bg-[#050810]/80 backdrop-blur-lg border-b border-white/10 py-3 shadow-lg"
             : "bg-transparent py-5"
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
@@ -76,23 +75,22 @@ export default function Navbar() {
                 <Fish className="h-6 w-6 text-white" />
               </div>
               <span className="font-outfit font-bold text-2xl tracking-tight transition-colors text-white">
-                Bettasph<span className="text-[var(--color-brand-aqua)]">.</span>
+                Ikanpedia<span className="text-[var(--color-brand-aqua)]">.id</span>
               </span>
             </Link>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center bg-white/5 backdrop-blur-md px-2 py-1.5 rounded-full border border-white/10">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
                 return (
-                  <Link 
+                  <Link
                     key={link.name}
-                    href={link.href} 
-                    className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                      isActive 
-                        ? "bg-white text-[var(--color-brand-navy)] shadow-sm" 
+                    href={link.href}
+                    className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isActive
+                        ? "bg-white text-[var(--color-brand-navy)] shadow-sm"
                         : "text-slate-300 hover:text-white hover:bg-white/10"
-                    }`}
+                      }`}
                   >
                     {link.name}
                   </Link>
@@ -102,7 +100,7 @@ export default function Navbar() {
 
             {/* Cart Button */}
             <div className="hidden md:flex items-center">
-              <button 
+              <button
                 onClick={() => setIsCartOpen(true)}
                 className="relative flex items-center justify-center p-3 rounded-full transition-all duration-300 bg-white/10 text-white hover:bg-white/20"
               >
@@ -117,7 +115,7 @@ export default function Navbar() {
 
             {/* Mobile menu button */}
             <div className="flex items-center md:hidden gap-3">
-              <button 
+              <button
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2 rounded-full transition-colors bg-white/10 text-white"
               >
@@ -143,9 +141,9 @@ export default function Navbar() {
           <div className="md:hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-xl overflow-hidden">
             <div className="px-4 py-6 space-y-2">
               {navLinks.map((link) => (
-                <Link 
+                <Link
                   key={link.name}
-                  href={link.href} 
+                  href={link.href}
                   className="block px-4 py-3 text-base font-semibold text-slate-800 hover:text-[var(--color-brand-aqua)] hover:bg-slate-50 rounded-xl"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -162,7 +160,7 @@ export default function Navbar() {
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsCartOpen(false)} />
         <div className={`absolute inset-y-0 right-0 max-w-full flex transition-transform duration-500 ease-in-out ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}>
           <div className="w-screen max-w-md w-full bg-white shadow-2xl flex flex-col h-full rounded-l-[2rem] overflow-hidden">
-            
+
             {/* Header Keranjang */}
             <div className="flex items-center justify-between px-6 py-6 border-b border-slate-100 bg-white">
               <h2 className="text-2xl font-outfit font-bold text-[var(--color-brand-navy)] flex items-center gap-2">
@@ -172,7 +170,7 @@ export default function Navbar() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            
+
             {/* List Item Keranjang */}
             <div className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
               {cartItems.length === 0 ? (

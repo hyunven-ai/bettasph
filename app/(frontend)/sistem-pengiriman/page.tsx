@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, Truck } from "lucide-react";
 
 export const metadata = {
-  title: 'Sistem Pengiriman | Bettasph',
+  title: 'Sistem Pengiriman | Ikanpedia.id',
   description: 'Metode packing karantina dan prosedur pengiriman ikan hidup di seluruh Indonesia.',
 };
 
@@ -29,7 +29,7 @@ export default function SistemPengirimanPage() {
 
           <div className="prose prose-slate prose-invert lg:prose-lg max-w-none text-slate-300 space-y-6">
             <p className="lead text-xl text-slate-400">
-              Setiap ikan yang Anda beli di Bettasph telah melalui SOP Karantina ketat sebelum diberangkatkan guna memastikan kelayakan di perjalanan.
+              Setiap ikan yang Anda beli di Ikanpedia.id telah melalui SOP Karantina ketat sebelum diberangkatkan guna memastikan kelayakan di perjalanan.
             </p>
 
             <h2 className="text-2xl font-bold text-white mt-10">Proses Sebelum Pengiriman (Karantina)</h2>

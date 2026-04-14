@@ -23,14 +23,14 @@ export default function AdminPengaturanPage() {
   const [saving, setSaving] = useState(false);
 
   const [settings, setSettings] = useState({
-    storeName: "Bettasph",
+    storeName: "Ikanpedia.id",
     storeTagline: "Kurator Ikan Hias Premium Indonesia",
-    storeUrl: "https://bettasph.com",
+    storeUrl: "https://ikanpedia.id.com",
     whatsapp: "+6281234567890",
-    telegram: "BettasphOfficial",
-    email: "info@bettasph.com",
+    telegram: "Ikanpedia.idOfficial",
+    email: "info@ikanpedia.id.com",
     address: "Jakarta Barat, Indonesia",
-    instagram: "@bettasph_official",
+    instagram: "@ikanpedia.id_official",
     orderNotif: true,
     lowStockNotif: true,
     emailDigest: false,
@@ -177,13 +177,13 @@ export default function AdminPengaturanPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
                     <label className={labelClass}>Instagram (@)</label>
-                    <input value={settings.instagram || ""} onChange={(e) => update("instagram", e.target.value)} className={inputClass} placeholder="@bettasph" />
+                    <input value={settings.instagram || ""} onChange={(e) => update("instagram", e.target.value)} className={inputClass} placeholder="@ikanpedia.id" />
                   </div>
                   <div>
                     <label className={labelClass}>Email</label>
                     <div className="relative">
                       <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
-                      <input value={settings.email || ""} onChange={(e) => update("email", e.target.value)} className={`${inputClass} pl-10`} placeholder="info@bettasph.com" />
+                      <input value={settings.email || ""} onChange={(e) => update("email", e.target.value)} className={`${inputClass} pl-10`} placeholder="info@ikanpedia.id.com" />
                     </div>
                   </div>
                 </div>

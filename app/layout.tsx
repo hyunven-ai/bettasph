@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
-  title: "Bettasph - Ikan Hias Premium",
+  title: "Ikanpedia.id - Ikan Hias Premium",
   description: "Beli Ikan Cupang, Koi, dan Arwana kualitas premium dengan harga terbaik.",
 };
 

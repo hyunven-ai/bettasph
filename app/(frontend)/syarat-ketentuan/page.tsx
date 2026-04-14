@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowLeft, BookOpen } from "lucide-react";
 
 export const metadata = {
-  title: 'Syarat & Ketentuan | Bettasph',
-  description: 'Syarat dan Ketentuan layanan transaksi jual beli ikan premium di Bettasph.',
+  title: 'Syarat & Ketentuan | Ikanpedia.id',
+  description: 'Syarat dan Ketentuan layanan transaksi jual beli ikan premium di Ikanpedia.id.',
 };
 
 export default function SyaratKetentuanPage() {
@@ -29,14 +29,14 @@ export default function SyaratKetentuanPage() {
 
           <div className="prose prose-slate prose-invert lg:prose-lg max-w-none text-slate-300 space-y-6">
             <p className="lead text-xl text-slate-400">
-              Selamat datang di website Bettasph. Dengan melakukan akses, menelusuri, mendaftar, atau melakukan transaksi pembelian pada layanan online ini, Anda menyetujui, dan terikat dengan Syarat & Ketentuan berikut.
+              Selamat datang di website Ikanpedia.id. Dengan melakukan akses, menelusuri, mendaftar, atau melakukan transaksi pembelian pada layanan online ini, Anda menyetujui, dan terikat dengan Syarat & Ketentuan berikut.
             </p>
             <p className="text-sm font-semibold italic">Terakhir Diperbarui: Oktober 2026</p>
             <hr className="border-white/10 my-8" />
 
             <h3 className="text-xl font-bold text-white mt-10">1. Kesesuaian Genetik Ikan (WYSIWYG)</h3>
             <p>
-              Hampir 90% katalog foto/video di platform Bettasph menerapkan sistem <em>What You See Is What You Get</em>. Artinya ikan yang dikirim merupakan ikan yang tepat sesuai tertera pada foto/video produk tersebut. Namun, hal-hal berikut patut diperhatikan bahwa:
+              Hampir 90% katalog foto/video di platform Ikanpedia.id menerapkan sistem <em>What You See Is What You Get</em>. Artinya ikan yang dikirim merupakan ikan yang tepat sesuai tertera pada foto/video produk tersebut. Namun, hal-hal berikut patut diperhatikan bahwa:
             </p>
             <ul className="list-disc pl-5">
               <li>Ikan adalah hewan mutasi genetik yang warnanya bisa saja menjadi lebih pekat saat sampai dibandingkan dengan saat video di ambil (terutama Cupang Marble/Koi/Avatar).</li>
@@ -48,7 +48,7 @@ export default function SyaratKetentuanPage() {
             <ul className="list-disc pl-5">
               <li>Toko berhak untuk mendahulukan pelanggan yang sudah melakukan transfer secara penuh, sistem berlaku siapa cepat dia dapat (First Pay, First Serve).</li>
               <li>Booking/Keep untuk reservasi di luar batas 1x24 Jam tidak diberlakukan kecuali disertai dengan Down Payment (DP) minimum 50%. DP tersebut berstatus hangus / non-refundable bila di-cancel kelak.</li>
-              <li>Pihak Bettasph tidak memfasilitasi rekber selain yang tercantum atas Rekening Instansi milik platform / Payment Gateway kami di Checkout. Hati-hati terhadap penipuan mengatasnamakan brand Bettasph.</li>
+              <li>Pihak Ikanpedia.id tidak memfasilitasi rekber selain yang tercantum atas Rekening Instansi milik platform / Payment Gateway kami di Checkout. Hati-hati terhadap penipuan mengatasnamakan brand Ikanpedia.id.</li>
             </ul>
             
             <h3 className="text-xl font-bold text-white mt-10">3. Ketentuan Pengembalian (Refunds) & Komplain</h3>
@@ -58,7 +58,7 @@ export default function SyaratKetentuanPage() {
 
             <h3 className="text-xl font-bold text-white mt-10">4. Perubahan Kebijakan</h3>
             <p>
-              Bettasph berhak secara sepihak dapat memperbarui, merevisi, mengubah Syarat dan Ketentuan, serta konten website kapan saja tanpa pemberitahuan mutlak terlebih dahulu kepada tiap pengguna. Disarankan meninjau kembali berkala halaman ini.
+              Ikanpedia.id berhak secara sepihak dapat memperbarui, merevisi, mengubah Syarat dan Ketentuan, serta konten website kapan saja tanpa pemberitahuan mutlak terlebih dahulu kepada tiap pengguna. Disarankan meninjau kembali berkala halaman ini.
             </p>
 
           </div>
