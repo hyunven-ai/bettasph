@@ -54,7 +54,7 @@ export default function AdminSeoSettingsPage() {
       .then(res => res.json())
       .then(data => {
         if (!data.error) {
-          setSettings(prev => ({ ...prev, ...data }));
+          setSettings((prev: any) => ({ ...prev, ...data }));
         }
       })
       .finally(() => setLoading(false));
