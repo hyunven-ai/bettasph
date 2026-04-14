@@ -15,7 +15,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { title, excerpt, content, category, author, image_url, published } = body;
+  const { title, excerpt, content, category, author, image_url, published, meta_title, meta_description, focus_keyword, tags } = body;
 
   if (!title?.trim()) {
     return NextResponse.json({ error: 'Judul artikel wajib diisi.' }, { status: 400 });
@@ -33,7 +33,11 @@ export async function POST(req: NextRequest) {
       category: category || 'Uncategorized',
       author: author || 'Admin',
       image_url: image_url || null,
-      published: published || false
+      published: published || false,
+      meta_title: meta_title || null,
+      meta_description: meta_description || null,
+      focus_keyword: focus_keyword || null,
+      tags: tags || []
     }])
     .select()
     .single();

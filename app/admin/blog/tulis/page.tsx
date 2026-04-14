@@ -27,6 +27,10 @@ function TulisArtikelForm() {
     image_url: "",
     author: "Bettasph Expert",
     published: false,
+    meta_title: "",
+    meta_description: "",
+    focus_keyword: "",
+    tags: [] as string[],
   });
 
   // Jika mode edit, ambil data existing
@@ -46,6 +50,10 @@ function TulisArtikelForm() {
             image_url: data.image_url || "",
             author: data.author || "Bettasph Expert",
             published: data.published || false,
+            meta_title: data.meta_title || "",
+            meta_description: data.meta_description || "",
+            focus_keyword: data.focus_keyword || "",
+            tags: data.tags || [],
           });
         }
       })
@@ -68,6 +76,41 @@ function TulisArtikelForm() {
 
   const handleEditorChange = (htmlContent: string) => {
     setFormData({ ...formData, content: htmlContent });
+  };
+
+  const [allBlogs, setAllBlogs] = useState<any[]>([]);
+  const [tagInput, setTagInput] = useState("");
+
+  useEffect(() => {
+    fetch('/api/blog').then(r => r.json()).then(data => {
+      if(Array.isArray(data)) setAllBlogs(data);
+    });
+  }, []);
+
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const val = e.currentTarget.value.trim();
+      if (val && !formData.tags.includes(val)) {
+        setFormData(prev => ({ ...prev, tags: [...prev.tags, val] }));
+      }
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setFormData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tagToRemove) }));
+  };
+
+  const getInternalLinks = () => {
+    if(!formData.focus_keyword.trim() || !allBlogs.length) return allBlogs.slice(0, 3);
+    const kw = formData.focus_keyword.toLowerCase();
+    return allBlogs.filter(b => 
+      b.id !== editId && 
+      (b.title.toLowerCase().includes(kw) || 
+       b.excerpt?.toLowerCase().includes(kw) || 
+       (b.tags && b.tags.some((t:string) => t.toLowerCase().includes(kw))))
+    ).slice(0, 3);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -107,6 +150,10 @@ function TulisArtikelForm() {
             image_url: "",
             author: "Bettasph Expert",
             published: false,
+            meta_title: "",
+            meta_description: "",
+            focus_keyword: "",
+            tags: [],
           });
         }
         setTimeout(() => {
@@ -204,6 +251,123 @@ function TulisArtikelForm() {
                     content={formData.content} 
                     onChange={handleEditorChange} 
                   />
+                </div>
+              </div>
+
+              <div className="space-y-6 mt-10">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-1 h-6 bg-indigo-500 rounded-full"></div>
+                  <h2 className="text-lg font-bold text-zinc-100">SEO Settings & Metadata</h2>
+                </div>
+                
+                <div className="bg-[#11121f] border border-zinc-800 rounded-xl p-6 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[13px] font-semibold text-zinc-300">Meta Title</label>
+                      <input
+                        type="text"
+                        name="meta_title"
+                        value={formData.meta_title}
+                        onChange={handleChange}
+                        placeholder="Ex: Panduan Lengkap Merawat Cupang 2026"
+                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 text-sm focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[13px] font-semibold text-zinc-300">Focus Keyword</label>
+                      <input
+                        type="text"
+                        name="focus_keyword"
+                        value={formData.focus_keyword}
+                        onChange={handleChange}
+                        placeholder="Ex: perawatan cupang"
+                        className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 text-sm focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[13px] font-semibold text-zinc-300">Meta Description</label>
+                    <textarea
+                      name="meta_description"
+                      value={formData.meta_description}
+                      onChange={handleChange}
+                      rows={3}
+                      placeholder="Tulis deskripsi singkat untuk mesin pencari..."
+                      className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 text-sm focus:outline-none focus:border-indigo-500 transition-all resize-none font-medium"
+                    />
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <label className="text-[13px] font-semibold text-zinc-300">Tags</label>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <input
+                          type="text"
+                          value={tagInput}
+                          onChange={(e) => setTagInput(e.target.value)}
+                          onKeyDown={handleTagKeyDown}
+                          placeholder="Ketik tag dan tekan Enter..."
+                          className="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-zinc-100 text-sm focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                        />
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
+                              setFormData(prev => ({ ...prev, tags: [...prev.tags, tagInput.trim()] }));
+                            }
+                            setTagInput("");
+                          }}
+                          className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-semibold rounded-xl transition-colors sm:w-auto w-full"
+                        >
+                          Add
+                        </button>
+                      </div>
+                      
+                      {formData.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {formData.tags.map(tag => (
+                            <div key={tag} className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-lg text-sm">
+                              <span>{tag}</span>
+                              <button type="button" onClick={() => removeTag(tag)} className="text-indigo-400 hover:text-white">
+                                &times;
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Internal Links Suggestions */}
+                <div className="bg-[#11121f] border border-zinc-800 rounded-xl p-6 space-y-4">
+                  <h3 className="text-sm font-bold text-zinc-200">Internal Link Suggestions</h3>
+                  <div className="space-y-3">
+                    {getInternalLinks().length > 0 ? (
+                      getInternalLinks().map(link => (
+                        <div key={link.id} className="p-3 bg-zinc-950 border border-zinc-800 rounded-lg flex items-center justify-between group">
+                          <div className="truncate pr-4 flex-1 min-w-0">
+                            <p className="text-sm font-medium text-zinc-200 truncate">{link.title}</p>
+                            <p className="text-xs text-zinc-500 truncate mt-0.5">/blog/{link.slug}</p>
+                          </div>
+                          <button 
+                            type="button"
+                            onClick={() => {
+                               navigator.clipboard.writeText(`/blog/${link.slug}`);
+                               alert("Link tersalin!");
+                            }}
+                            className="shrink-0 px-3 py-1.5 bg-zinc-800 hover:bg-indigo-500 hover:text-white text-zinc-300 text-xs font-medium rounded-lg transition-colors ml-2"
+                          >
+                            Copy Link
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-zinc-500">Belum ada saran link internal.</p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
