@@ -46,11 +46,11 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </div>
           
           {post.image_url && (
-            <div className="w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden shadow-2xl mb-12 border border-white/5 bg-[#0A0F1C]">
+            <div className="w-full rounded-2xl overflow-hidden shadow-2xl mb-12 border border-white/5 bg-[#0A0F1C]">
               <img 
                 src={post.image_url} 
                 alt={post.title} 
-                className="w-full h-full object-cover"
+                className="w-full h-auto block"
               />
             </div>
           )}

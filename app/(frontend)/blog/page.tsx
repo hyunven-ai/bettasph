@@ -41,7 +41,7 @@ export default async function BlogPage() {
           ) : (
             posts.map((post) => (
               <Link href={`/blog/${post.slug}`} key={post.id} className="group flex flex-col bg-[#0A0F1C] rounded-2xl border border-white/5 overflow-hidden hover:border-[var(--color-brand-aqua)]/50 transition-all duration-500">
-                <div className="aspect-video w-full overflow-hidden bg-[#050810] relative flex items-center justify-center">
+                <div className="aspect-[1.8/1] w-full overflow-hidden bg-[#050810] relative flex items-center justify-center">
                   {post.image_url ? (
                     <img
                       src={post.image_url}

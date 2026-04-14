@@ -38,7 +38,7 @@ export default function ProductCard({ product }: { product: FishProduct }) {
         {/* Glow behind image on hover */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-40 h-40 bg-[var(--color-brand-aqua)] rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-1000 pointer-events-none"></div>
 
-        <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#050810]">
+        <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#050810]">
           <img 
             src={product.imageUrl} 
             alt={product.name} 
