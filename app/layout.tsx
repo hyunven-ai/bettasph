@@ -16,16 +16,25 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const siteName = settings?.seo_site_name || "Ikanpedia.id";
   const desc = settings?.seo_description || "Beli Ikan Cupang, Koi, dan Arwana kualitas premium dengan harga terbaik.";
-  
-  // Provide the default title logic based on template
-  const defaultTitle = settings?.seo_title_template 
-    ? settings.seo_title_template.replace('%title%', 'Beranda').replace('%site_name%', siteName) 
+
+  // Default title for homepage (beranda)
+  const defaultTitle = settings?.seo_title_template
+    ? settings.seo_title_template.replace('%title%', 'Beranda').replace('%site_name%', siteName)
     : siteName;
 
-  // Next.js %s template format
-  const templateStr = settings?.seo_title_template 
+  // Build Next.js %s template. IMPORTANT: if seo_title_template doesn't contain
+  // '%title%', the replace() is a no-op and there's no '%s', which causes Next.js
+  // to use a static string for every page, ignoring child generateMetadata.
+  // We always validate that the final templateStr contains '%s'.
+  let templateStr = settings?.seo_title_template
     ? settings.seo_title_template.replace('%title%', '%s').replace('%site_name%', siteName)
     : `%s | ${siteName}`;
+
+  // Safety net: if the stored template had no %title% placeholder, fall back to
+  // a safe default so child pages can still set their own titles.
+  if (!templateStr.includes('%s')) {
+    templateStr = `%s | ${siteName}`;
+  }
 
   return {
     title: {

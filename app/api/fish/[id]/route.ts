@@ -41,6 +41,21 @@ export async function PUT(
       stock: parseInt(body.stock),
       description: body.description,
       slug: generateSlug(body.name),
+      // Filter fields
+      grade: body.grade || 'Standard',
+      purpose: body.purpose || null,
+      color: body.color || null,
+      gender: body.gender || null,
+      certified: body.certified || false,
+      health_status: body.health_status || 'Siap Kirim',
+      badge: body.badge || null,
+      featured: body.featured || false,
+      // Discount
+      discount_percent: parseInt(body.discount_percent) || 0,
+      // Media gallery
+      media_urls: Array.isArray(body.media_urls) ? body.media_urls : [],
+      // Karakteristik
+      characteristic: body.characteristic || null,
     })
     .eq('id', id)
     .select()

@@ -154,8 +154,26 @@ export default function AdminKoleksiPage() {
                         {fish.category}
                       </span>
                     </td>
-                    <td className="px-6 py-3.5 font-medium text-zinc-200 text-[13px]">
-                      {formatPrice(fish.price)}
+                    <td className="px-6 py-3.5">
+                      {fish.discount_percent > 0 ? (
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-white text-[13px]">
+                              {formatPrice(Math.round(fish.price * (1 - fish.discount_percent / 100)))}
+                            </span>
+                            <span className="px-1.5 py-0.5 bg-rose-500/15 border border-rose-500/25 text-rose-400 text-[10px] font-bold rounded-md">
+                              -{fish.discount_percent}%
+                            </span>
+                          </div>
+                          <span className="text-zinc-600 text-[11px] line-through font-medium">
+                            {formatPrice(fish.price)}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="font-medium text-zinc-200 text-[13px]">
+                          {formatPrice(fish.price)}
+                        </span>
+                      )}
                     </td>
                     <td className="px-6 py-3.5">
                       <span className={`text-[13px] font-semibold ${fish.stock > 0 ? "text-emerald-400" : "text-rose-400"}`}>

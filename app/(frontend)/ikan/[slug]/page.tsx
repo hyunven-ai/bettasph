@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
 import { FadeIn } from "@/components/FadeIn";
 import { Skeleton } from "@/components/Skeleton";
+import MediaSlider from "@/components/MediaSlider";
 
 export default function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params);
@@ -27,7 +28,8 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
       if (data) {
         setProduct({
           ...data,
-          imageUrl: data.image_url // Mapping snake_case from DB
+          imageUrl: data.image_url,
+          mediaUrls: data.media_urls ?? [],
         });
       } else {
         console.error('Error fetching product:', error);
@@ -38,15 +40,20 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     fetchProduct();
   }, [resolvedParams.slug]);
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(price);
-  };
+  const formatPrice = (price: number) =>
+    new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(price);
+
+  const discount = product?.discount_percent ?? 0;
+  const hasDiscount = discount > 0;
+  const finalPrice = product
+    ? hasDiscount ? Math.round(product.price * (1 - discount / 100)) : product.price
+    : 0;
 
   const handleAddToCart = () => {
     addToCart({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: finalPrice,
       imageUrl: product.imageUrl,
     });
     alert(`${product.name} telah diamankan ke Keranjang Anda.`);
@@ -84,33 +91,16 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
            </div>
         ) : (
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             
-          {/* Image Showcase */}
+          {/* ── Media Slider ── */}
           <FadeIn delay={0.2} direction="right">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050810] via-transparent to-transparent z-10"></div>
-              <div className="aspect-[4/5] rounded-[3rem] overflow-hidden bg-[#0A0F1C] border border-white/5 relative shadow-2xl">
-                <img 
-                  src={product.imageUrl} 
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-                {/* Overlay elements */}
-                <div className="absolute top-8 right-8 z-20 flex gap-3">
-                   <button className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10 text-white hover:bg-white hover:text-black transition-all duration-300">
-                     <Share2 className="w-5 h-5" />
-                   </button>
-                </div>
-                <div className="absolute bottom-12 left-12 z-20">
-                  <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-black/60 backdrop-blur-md rounded-full border border-white/10 text-white/90 text-sm font-bold shadow-xl">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Sisa {product.stock} ekor di Farm
-                  </div>
-                </div>
-              </div>
-              {/* Ambient shadow behind image */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-[var(--color-brand-aqua)]/20 blur-[120px] -z-10 rounded-full"></div>
+            <div className="sticky top-28">
+              <MediaSlider
+                mediaUrls={product.mediaUrls}
+                productName={product.name}
+                fallbackUrl={product.imageUrl}
+              />
             </div>
           </FadeIn>
 
@@ -133,10 +123,26 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
             
             <FadeIn delay={0.5}>
               <div className="mb-10 pb-10 border-b border-white/5">
-                 <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black mb-3">Nilai Investasi</p>
-                 <div className="text-5xl lg:text-7xl font-outfit font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-slate-500 tracking-tighter">
-                  {formatPrice(product.price)}
-                 </div>
+                <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black mb-3">Nilai Investasi</p>
+                {hasDiscount ? (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-4">
+                      <div className="text-5xl lg:text-7xl font-outfit font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-slate-500 tracking-tighter">
+                        {formatPrice(finalPrice)}
+                      </div>
+                      <span className="self-start mt-2 px-3 py-1.5 bg-rose-500 text-white text-sm font-black rounded-full shadow-lg">
+                        -{discount}%
+                      </span>
+                    </div>
+                    <p className="text-slate-600 text-xl font-medium line-through">
+                      {formatPrice(product.price)}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="text-5xl lg:text-7xl font-outfit font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-slate-500 tracking-tighter">
+                    {formatPrice(product.price)}
+                  </div>
+                )}
               </div>
             </FadeIn>
 
@@ -148,7 +154,9 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                  </div>
                  <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-6 hover:bg-white/[0.05] transition-colors">
                     <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2 opacity-50">Karakteristik</p>
-                    <p className="text-white font-bold text-xl font-outfit">Agresif / Alpha</p>
+                    <p className="text-white font-bold text-xl font-outfit">
+                       {product.characteristic || "—"}
+                    </p>
                  </div>
               </div>
             </FadeIn>
