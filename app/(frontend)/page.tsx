@@ -98,12 +98,9 @@ export default async function Home() {
                   <div className="absolute inset-x-8 bottom-0 h-3/4 bg-[var(--color-brand-aqua)]/20 blur-[80px] rounded-full -z-10" />
 
                   <div className="relative rounded-[2rem] lg:rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
-                    <video
-                      src="https://i.imgur.com/qKKdDMT.mp4"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
+                    <img
+                      src="https://dgocoeiqmqnkmwphorzy.supabase.co/storage/v1/object/public/gallery/1776021573392-ifcp0j.jpg"
+                      alt="Premium Betta Fish"
                       className="w-full aspect-[3/4] lg:aspect-[4/5] object-cover object-center animate-float"
                     />
                     {/* Gradient overlay bottom */}
