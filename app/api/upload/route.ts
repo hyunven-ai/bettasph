@@ -7,18 +7,29 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'im
 
 // POST /api/upload — upload gambar ke Supabase Storage
 export async function POST(req: NextRequest) {
-  const formData = await req.formData();
+  let formData: FormData;
+
+  try {
+    formData = await req.formData();
+  } catch {
+    return NextResponse.json(
+      { error: 'Request harus berformat multipart/form-data.' },
+      { status: 400 }
+    );
+  }
+
   const file = formData.get('file') as File | null;
   const folder = (formData.get('folder') as string) || 'auctions';
 
-  if (!file) {
-    return NextResponse.json({ error: 'File tidak ditemukan.' }, { status: 400 });
+  if (!file || typeof file === 'string') {
+    return NextResponse.json({ error: 'File tidak ditemukan dalam request.' }, { status: 400 });
   }
 
   // Validasi tipe file
-  if (!ALLOWED_TYPES.includes(file.type)) {
+  const fileType = file.type || '';
+  if (!ALLOWED_TYPES.includes(fileType)) {
     return NextResponse.json(
-      { error: `Tipe file tidak didukung. Gunakan: JPG, PNG, WebP, atau GIF.` },
+      { error: `Tipe file "${fileType || 'tidak diketahui'}" tidak didukung. Gunakan: JPG, PNG, WebP, atau GIF.` },
       { status: 400 }
     );
   }
@@ -37,33 +48,45 @@ export async function POST(req: NextRequest) {
   const random = Math.random().toString(36).substring(2, 8);
   const fileName = `${folder}/${timestamp}-${random}.${ext}`;
 
-  // Convert File ke ArrayBuffer
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = new Uint8Array(arrayBuffer);
+  try {
+    // Convert File ke ArrayBuffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = new Uint8Array(arrayBuffer);
 
-  // Upload ke Supabase Storage
-  const { data, error } = await supabaseAdmin.storage
-    .from(BUCKET)
-    .upload(fileName, buffer, {
-      contentType: file.type,
-      upsert: false,
+    // Upload ke Supabase Storage
+    const { data, error } = await supabaseAdmin.storage
+      .from(BUCKET)
+      .upload(fileName, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (error) {
+      console.error('[Upload API] Supabase Storage error:', error);
+      return NextResponse.json(
+        { error: `Upload ke storage gagal: ${error.message}` },
+        { status: 500 }
+      );
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabaseAdmin.storage
+      .from(BUCKET)
+      .getPublicUrl(data.path);
+
+    return NextResponse.json({
+      url: publicUrl,
+      path: data.path,
+      size: file.size,
+      type: file.type,
     });
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (err: any) {
+    console.error('[Upload API] Unexpected error:', err);
+    return NextResponse.json(
+      { error: `Terjadi kesalahan server: ${err?.message || 'Unknown error'}` },
+      { status: 500 }
+    );
   }
-
-  // Get public URL
-  const { data: { publicUrl } } = supabaseAdmin.storage
-    .from(BUCKET)
-    .getPublicUrl(data.path);
-
-  return NextResponse.json({
-    url: publicUrl,
-    path: data.path,
-    size: file.size,
-    type: file.type,
-  });
 }
 
 // DELETE /api/upload?path=... — hapus gambar dari storage
@@ -80,6 +103,7 @@ export async function DELETE(req: NextRequest) {
     .remove([path]);
 
   if (error) {
+    console.error('[Upload API] Delete error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
