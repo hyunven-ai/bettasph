@@ -14,6 +14,9 @@ export default function Navbar() {
   const [whatsapp, setWhatsapp] = useState("628999435054");
   const pathname = usePathname();
 
+  // Sembunyikan Navbar pada halaman detail lelang (punya topbar sendiri)
+  const isAuctionDetail = /^\/lelang\/[^/]+/.test(pathname);
+
   const cartItems = useCartStore((state) => state.items);
   const totalCart = useCartStore((state) => state.getTotal());
   const removeFromCart = useCartStore((state) => state.removeItem);
@@ -55,12 +58,15 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Beranda", href: "/" },
+    { name: "Lelang", href: "/lelang" },
     { name: "Katalog Eksklusif", href: "/ikan" },
     { name: "Library Edukasi", href: "/blog" },
   ];
 
   return (
     <>
+      {/* Navbar — disembunyikan di halaman detail lelang */}
+      {!isAuctionDetail && (
       <nav
         className={`fixed w-full z-40 transition-all duration-300 ${hasScrolled
             ? "bg-[#050810]/80 backdrop-blur-lg border-b border-white/10 py-3 shadow-lg"
@@ -154,6 +160,7 @@ export default function Navbar() {
           </div>
         )}
       </nav>
+      )} {/* end !isAuctionDetail */}
 
       {/* Slide-over Cart Panel */}
       <div className={`fixed inset-0 z-50 transition-opacity duration-300 ${isCartOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>

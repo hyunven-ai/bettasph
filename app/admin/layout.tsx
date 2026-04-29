@@ -16,6 +16,7 @@ import {
   BookOpen,
   Search,
   PieChart,
+  Gavel,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
@@ -73,6 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { name: "Dashboard", icon: LayoutDashboard, href: "/admin" },
         { name: "Koleksi Ikan", icon: Fish, href: "/admin/koleksi" },
         { name: "Tambah Koleksi", icon: PackagePlus, href: "/admin/tambah" },
+        { name: "Lelang", icon: Gavel, href: "/admin/lelang" },
       ],
     },
     {

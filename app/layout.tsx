@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -68,23 +69,7 @@ export default async function RootLayout({
 
   return (
     <html lang="id" className="scroll-smooth">
-      <head>
-        {settings?.analytics_ga_id && (
-          <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${settings.analytics_ga_id}`}></script>
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${settings.analytics_ga_id}');
-                `,
-              }}
-            />
-          </>
-        )}
-      </head>
+      <head />
       <body className={`${inter.variable} ${outfit.variable} font-sans antialiased`}>
         {children}
       </body>
