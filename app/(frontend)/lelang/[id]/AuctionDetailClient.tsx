@@ -68,6 +68,7 @@ export default function AuctionDetailClient({ auctionId }: { auctionId: string }
   const [copied, setCopied] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [newBidFlash, setNewBidFlash] = useState(false);
+  const [newBidIds, setNewBidIds] = useState<Set<string>>(new Set());
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -113,9 +114,24 @@ export default function AuctionDetailClient({ auctionId }: { auctionId: string }
             prev ? { ...prev, current_price: newBid.amount, bid_count: prev.bid_count + 1 } : prev
           );
 
-          // Flash animasi bid baru
+          // Flash animasi bid baru (price stats)
           setNewBidFlash(true);
           setTimeout(() => setNewBidFlash(false), 1500);
+
+          // Track new bid ID for leaderboard highlight
+          setNewBidIds((prev) => {
+            const next = new Set(prev);
+            next.add(newBid.id);
+            return next;
+          });
+          // Remove highlight after 4 seconds
+          setTimeout(() => {
+            setNewBidIds((prev) => {
+              const next = new Set(prev);
+              next.delete(newBid.id);
+              return next;
+            });
+          }, 4000);
         }
       )
       .on(
@@ -565,7 +581,7 @@ export default function AuctionDetailClient({ auctionId }: { auctionId: string }
 
             {/* Leaderboard Bid (mobile hidden, desktop shown) */}
             <div className="lg:block">
-              <BidLeaderboard bids={bids} currentPrice={auction.current_price} />
+              <BidLeaderboard bids={bids} currentPrice={auction.current_price} isConnected={isConnected} newBidIds={newBidIds} />
             </div>
           </div>
 
@@ -608,7 +624,7 @@ export default function AuctionDetailClient({ auctionId }: { auctionId: string }
 
             {/* Leaderboard mobile */}
             <div className="lg:hidden">
-              <BidLeaderboard bids={bids} currentPrice={auction.current_price} />
+              <BidLeaderboard bids={bids} currentPrice={auction.current_price} isConnected={isConnected} newBidIds={newBidIds} />
             </div>
           </div>
         </div>
@@ -618,7 +634,24 @@ export default function AuctionDetailClient({ auctionId }: { auctionId: string }
 }
 
 // ---- Bid Leaderboard Sub-component ----
-function BidLeaderboard({ bids, currentPrice }: { bids: Bid[]; currentPrice: number }) {
+function BidLeaderboard({
+  bids,
+  currentPrice,
+  isConnected,
+  newBidIds,
+}: {
+  bids: Bid[];
+  currentPrice: number;
+  isConnected: boolean;
+  newBidIds: Set<string>;
+}) {
+  // Auto-refresh timeAgo every 30 seconds
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setTick((t) => t + 1), 30_000);
+    return () => clearInterval(timer);
+  }, []);
+
   if (bids.length === 0) {
     return (
       <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 text-center">
@@ -633,15 +666,30 @@ function BidLeaderboard({ bids, currentPrice }: { bids: Bid[]; currentPrice: num
       <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center gap-2">
         <TrendingUp className="w-4 h-4 text-emerald-400" />
         <h3 className="text-sm font-bold text-white">Leaderboard Bidder</h3>
+        {/* Live connection badge */}
+        {isConnected && (
+          <span className="flex items-center gap-1 text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+            LIVE
+          </span>
+        )}
         <span className="ml-auto text-xs text-zinc-600">{bids.length} bid</span>
       </div>
       <div className="divide-y divide-white/[0.04]">
         {bids.slice(0, 10).map((bid, i) => {
           const isWinner = bid.amount === currentPrice && i === 0;
+          const isNew = newBidIds.has(bid.id);
           return (
             <div
               key={bid.id}
-              className={`flex items-center gap-3 px-5 py-3 ${isWinner ? "bg-emerald-500/[0.07]" : ""}`}
+              style={isNew ? { animation: "bidFlash 0.6s ease-out" } : undefined}
+              className={`flex items-center gap-3 px-5 py-3 transition-colors duration-700 ${
+                isNew
+                  ? "bg-emerald-500/20"
+                  : isWinner
+                  ? "bg-emerald-500/[0.07]"
+                  : ""
+              }`}
             >
               {/* Rank */}
               <div
@@ -668,6 +716,11 @@ function BidLeaderboard({ bids, currentPrice }: { bids: Bid[]; currentPrice: num
                       #1
                     </span>
                   )}
+                  {isNew && (
+                    <span className="text-[9px] bg-sky-500/20 border border-sky-500/40 text-sky-300 px-1.5 py-0.5 rounded font-bold animate-pulse">
+                      BARU
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-2 mt-0.5">
                   {bid.bidder_city && (
@@ -681,13 +734,23 @@ function BidLeaderboard({ bids, currentPrice }: { bids: Bid[]; currentPrice: num
               </div>
 
               {/* Amount */}
-              <p className={`text-sm font-bold flex-shrink-0 ${isWinner ? "text-emerald-400" : "text-zinc-400"}`}>
+              <p className={`text-sm font-bold flex-shrink-0 ${
+                isNew ? "text-sky-300" : isWinner ? "text-emerald-400" : "text-zinc-400"
+              }`}>
                 {formatRupiah(bid.amount)}
               </p>
             </div>
           );
         })}
       </div>
+
+      {/* Keyframe style injected inline */}
+      <style>{`
+        @keyframes bidFlash {
+          0%   { background-color: rgba(16,185,129,0.35); }
+          100% { background-color: transparent; }
+        }
+      `}</style>
     </div>
   );
 }
