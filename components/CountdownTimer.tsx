@@ -42,8 +42,9 @@ export default function CountdownTimer({
   const isScheduled = status === "scheduled";
   const targetTime = isScheduled && startsAt ? startsAt : endsAt;
 
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => calcTimeLeft(targetTime));
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 });
   const [hasExpired, setHasExpired] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const tick = useCallback(() => {
     const t = calcTimeLeft(targetTime);
@@ -55,9 +56,11 @@ export default function CountdownTimer({
   }, [targetTime, hasExpired, onExpired]);
 
   useEffect(() => {
+    setMounted(true);
+    setTimeLeft(calcTimeLeft(targetTime));
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [tick]);
+  }, [tick, targetTime]);
 
   // Urgent jika < 1 jam
   const isUrgent = timeLeft.total > 0 && timeLeft.total < 3600 * 1000;
@@ -68,6 +71,17 @@ export default function CountdownTimer({
     md: { box: "text-sm px-2.5 py-1 rounded-lg", label: "text-[10px]", sep: "text-lg" },
     lg: { box: "text-xl px-4 py-2 rounded-xl", label: "text-xs", sep: "text-3xl" },
   }[size];
+
+  if (!mounted) {
+    return (
+      <div className={`inline-flex items-center gap-1.5 ${className}`}>
+        <span className="inline-flex items-center gap-1.5 bg-zinc-800/60 border border-zinc-700 text-zinc-400 text-xs font-medium px-3 py-1.5 rounded-full">
+          <span className="w-1.5 h-1.5 rounded-full bg-zinc-500 inline-block" />
+          Memuat...
+        </span>
+      </div>
+    );
+  }
 
   if (isEnded) {
     return (
